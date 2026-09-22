@@ -5,10 +5,12 @@ substitute 63 s (live fetch + two sandboxed checks) · send 30 s · after 16 s �
 of agent time. Talk over the substitute turn; it is the long one. Before the demo: `python seed.py --reset --visualize`
 (≈70 s) gives a clean memory with no substitution decision on record.
 
-Setup before you walk up: run `powershell -ExecutionPolicy Bypass -File .\prep.ps1` (clean
-memory + graphs, ~70 s), then `.venv\Scripts\python.exe cli.py`. Docker Desktop running. If
-Gmail is authorised, the rep email sits in your inbox and your Gmail tab is visible for the sent
-request; otherwise the inbox comes from `personal_data\*.eml` and the request lands in `out\`.
+Setup before you walk up: the browser UI is running at http://localhost:8501
+(`.venv\Scripts\python.exe -m streamlit run ui.py`). Click **↺ Reset memory** in the sidebar
+if you rehearsed (~70 s), then walk the five numbered beat buttons in order; the email gate
+shows an **Approve and send** button. The "Memory graphs" tab shows the three Cognee layers.
+Docker Desktop running. Gmail is live: the rep email sits in your inbox and the sent request
+arrives in the same inbox — keep your phone or a Gmail tab visible.
 
 | Time | Say | Do |
 |---|---|---|

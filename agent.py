@@ -75,7 +75,12 @@ Be concise: this is a live demo. Prefer short paragraphs and small tables. Today
 """
 
 
+# Every tool result is also appended here so a UI can render the trace live.
+TRACE: list[dict] = []
+
+
 def _emit(title: str, text: str, style: str = "cyan") -> None:
+    TRACE.append({"title": title, "text": text, "style": style, "at": dt.datetime.now().strftime("%H:%M:%S")})
     if VERBOSE:
         shown = text if len(text) <= 900 else text[:900] + " ..."
         console.print(Panel(shown, title=title, border_style=style, expand=False))
