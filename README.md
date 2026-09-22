@@ -11,7 +11,7 @@ web, verifies a substitute deterministically in a sandbox, and sends the request
 follow-up — after he approves.
 
 - **Written case:** [`SUBMISSION.md`](SUBMISSION.md) · **Demo runbook:** [`DEMO.md`](DEMO.md) · **Build plan:** [`PLAN.md`](PLAN.md)
-- **Demo video:** [`artifacts/video/spec-brain-demo.webm`](artifacts/video/spec-brain-demo.webm) — short time-lapse of the browser UI running all seven beats end to end (static waits collapsed; `timelapse.py`); the unedited real-time recording is [`spec-brain-demo-realtime.webm`](artifacts/video/spec-brain-demo-realtime.webm) (3:22), both produced by driving the live app with `make_video.py`
+- **Demo video:** [`artifacts/video/spec-brain-demo.webm`](artifacts/video/spec-brain-demo.webm) — the browser UI running all seven beats end to end (3:22, unedited; the first turn includes a cold-start wait), recorded by driving the live app with `make_video.py`
 - **Evidence:** [`artifacts/`](artifacts/) — scripted-run transcript, a generated substitution request, smoke results
 - **Memory graphs:** [`graph/personal.html`](graph/personal.html) · [`graph/office.html`](graph/office.html) · [`graph/public.html`](graph/public.html)
 
