@@ -66,7 +66,16 @@ the USG page → two sandboxed checks:
 
 **Send** (34 s) — approval gate → substitution request sent → decision written to memory.
 
-**After** — recall of the same memory, once the decision has been written back (4 s):
+**After** — the same question, asked again in the same scripted run after the send:
+> Yes — there is now a substitution decision on record, dated today. **[PERSONAL decision,
+> 2026-09-21]** Original spec: Rockfon Sonar 2x2 lay-in … dropped. Why: lead time rose from ~6 to
+> **16 weeks from PO** … Substitute: **USG Mars High-NRC** … the **0.85 NRC / 35 CAC** option.
+> Check result: PASSES all five … Excluded: the 0.90 NRC variant — FAILED on CAC 30. Source:
+> usg.com/…mars-high-nrc-acoustical-panels-88137, retrieved 2026-09-22 … Three open items carried
+> in the decision: lead time in writing before the 25 Sep PO; a finish sample for Northgate; brief
+> the installer on edge handling.
+
+The raw recall behind that answer (direct tool call, 4 s):
 > [PERSONAL] [personal decision, 2026-09-21] Mission St, Level 3 open office (Northgate Partners)
 > — ceiling substitution sent 2026-09-21. The specified Rockfon Sonar 2x2 lay-in went from an
 > indicated ~6 weeks to 16 weeks from PO … Proposed substitute: USG Mars High-NRC … primary

@@ -1,8 +1,8 @@
 # Demo runbook — 3 minutes
 
-Measured in the scripted run (Opus 5, effort medium): before 23 s · inbox 11 s · substitute
-66 s (two live fetches + two sandboxed checks) · send 34 s · after 21 s. Talk over the
-substitute turn; it is the long one. Before the demo: `python seed.py --reset --visualize`
+Measured in the final scripted run (Opus 5, effort medium): before 21 s · inbox 12 s ·
+substitute 63 s (live fetch + two sandboxed checks) · send 30 s · after 16 s — about 2.4 min
+of agent time. Talk over the substitute turn; it is the long one. Before the demo: `python seed.py --reset --visualize`
 (≈70 s) gives a clean memory with no substitution decision on record.
 
 Setup before you walk up: run `powershell -ExecutionPolicy Bypass -File .\prep.ps1` (clean
