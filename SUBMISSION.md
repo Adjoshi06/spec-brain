@@ -31,9 +31,17 @@ just not allowed to be the source of truth.
 
 ## The agent (AWS Strands + Claude)
 
-Nine tools: `recall_personal`, `recall_office`, `recall_public`, `inbox_scan` (Gmail),
+Twelve tools: `recall_personal`, `recall_office`, `recall_public`, `inbox_scan` (Gmail),
+`drive_search` + `drive_read` (Google Drive; a document read is stored into personal memory),
 `web_search` + `live_lookup` (Bright Data), `check_substitute` (Docker sandbox),
-`send_substitution_request` (Gmail, gated by Strands `HumanInTheLoop`), `remember_decision`.
+`send_substitution_request` (Gmail) and `create_reminder` (Google Calendar) — both gated by
+Strands `HumanInTheLoop` — and `remember_decision`.
+
+Two interaction modes: question-driven (the five demo beats) and autonomous — a **risk scan**
+that reads inbox and Drive, cross-checks every active project against memory and the office
+standard, and returns ranked risks each with one proposed, gated action.
+
+Personal data sources used, per the brief: Gmail, Google Drive, Google Calendar, local files.
 
 The model never compares numbers: `check_substitute` runs `spec_check.py` inside a container
 with `--network none --read-only --cap-drop ALL`, as user `nobody`. If Docker is missing the

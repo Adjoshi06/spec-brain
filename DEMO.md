@@ -18,8 +18,11 @@ arrives in the same inbox — keep your phone or a Gmail tab visible.
 | 0:20 | "Three layers, hard walls in Cognee: his personal memory, the office standard, and the public web through Bright Data. Every fact is tagged with where it came from." | flash the graph tab |
 | 0:35 | "First: what does it know *before*?" | `/before` → expect: spec is Sonar, **no substitution decision on record** |
 | 0:50 | "Now the real trigger: my inbox." | `Anything in my inbox this week I should worry about on Mission St?` → `[INBOX]` finds the 16-week email, `[PERSONAL]` recalls the 8-week PO-to-site window and the 2025 lesson |
+| 1:10 | "And my Drive: last week's site meeting." | **2b** → `[DRIVE]` reads the site-meeting Doc: the ceiling now runs into four enclosed rooms, so the CAC line of the standard applies — and the document is stored into memory as it is read |
 | 1:20 | "Find a substitute — and it is not allowed to do the numbers itself." | `Find me a substitute for the Mission St ceiling tile and check it against our standard.` → `[OFFICE STANDARD]` thresholds → `[PUBLIC]` candidates → live Bright Data fetch → `[CALCULATION · sandboxed]` table (point at *network none, read-only*) → recommendation with explicit gaps |
-| 2:20 | "Then it acts — with my approval." | `Send the substitution request to the BuildCo PM.` → approval panel → `y` → show the email arriving → `[PERSONAL] decision is being written to memory` |
+| 2:20 | "Then it acts — with my approval." | **4** → approval panel → **Approve** → show the email arriving → `[PERSONAL] decision is being written to memory` |
+| 2:40 | "And it schedules the follow-up." | **4b** → `create_reminder` approval panel → **Approve** → `[ACTION · calendar]` with the event link (Wed 23 Sep 09:00, PO due Fri) |
+| (if asked) | "It can also run on its own." | **🔎 Scan for risks** → inbox + Drive + memory + standard → ranked risks, one proposed gated action each |
 | 2:45 | "And now it remembers." | `/before` again → the decision, why, and the sources |
 | 2:55 | "One architect's memory today; the firm-scale version is what I'm building as Archetype." | — |
 
