@@ -18,13 +18,14 @@ import html
 import io
 import os
 import re
-from datetime import datetime
+from datetime import datetime, timedelta
 from email.mime.text import MIMEText
 from pathlib import Path
 
 SCOPES = [
     "https://www.googleapis.com/auth/gmail.readonly",
     "https://www.googleapis.com/auth/gmail.send",
+    "https://www.googleapis.com/auth/calendar.events",
     "https://www.googleapis.com/auth/drive.readonly",
 ]
 
@@ -231,6 +232,54 @@ def send_email(to: str, subject: str, body: str) -> dict:
     except Exception as exc:  # noqa: BLE001 - never lose the request: write it locally, say why
         result = _send_local(to, subject, body)
         result["source"] = f"local_file (gmail failed: {type(exc).__name__}: {str(exc)[:120]})"
+        return result
+
+
+# --------------------------------------------------------------------------- calendar
+
+_calendar = None
+CALENDAR_TZ = os.environ.get("CALENDAR_TZ", "America/Los_Angeles")
+
+
+def get_calendar():
+    """Return the Calendar v3 service (same OAuth token as Gmail/Drive)."""
+    global _calendar
+    if _calendar is None:
+        from googleapiclient.discovery import build
+
+        _calendar = build("calendar", "v3", credentials=_load_credentials(), cache_discovery=False)
+    return _calendar
+
+
+def _reminder_local(summary: str, start_iso: str, notes: str) -> dict:
+    OUT_DIR.mkdir(exist_ok=True)
+    path = OUT_DIR / f"{datetime.now().strftime('%Y%m%d-%H%M%S')}-reminder.md"
+    path.write_text(f"# Reminder: {summary}\n\n**When:** {start_iso}\n\n{notes}\n", encoding="utf-8")
+    return {"id": str(path), "htmlLink": "", "summary": summary, "start": start_iso, "source": "local_file"}
+
+
+def create_event(summary: str, start_iso: str, notes: str = "", minutes: int = 30) -> dict:
+    """Create a calendar event. ``start_iso`` is a local time (2026-09-23T09:00) or a date
+    (2026-09-23) for an all-day reminder. Falls back to a file in ``out/`` and says why."""
+    if not google_ready():
+        return _reminder_local(summary, start_iso, notes)
+    try:
+        if len(start_iso.strip()) == 10:
+            day = datetime.strptime(start_iso.strip(), "%Y-%m-%d").date()
+            when = {"start": {"date": day.isoformat()}, "end": {"date": (day + timedelta(days=1)).isoformat()}}
+        else:
+            start = datetime.fromisoformat(start_iso.strip())
+            end = start + timedelta(minutes=minutes)
+            when = {"start": {"dateTime": start.isoformat(), "timeZone": CALENDAR_TZ},
+                    "end": {"dateTime": end.isoformat(), "timeZone": CALENDAR_TZ}}
+        body = {"summary": summary, "description": notes, **when,
+                "reminders": {"useDefault": False, "overrides": [{"method": "popup", "minutes": 30}]}}
+        created = get_calendar().events().insert(calendarId="primary", body=body).execute()
+        return {"id": created.get("id"), "htmlLink": created.get("htmlLink"), "summary": summary,
+                "start": start_iso, "source": "google"}
+    except Exception as exc:  # noqa: BLE001 - never lose the reminder: write it locally, say why
+        result = _reminder_local(summary, start_iso, notes)
+        result["source"] = f"local_file (calendar failed: {type(exc).__name__}: {str(exc)[:120]})"
         return result
 
 

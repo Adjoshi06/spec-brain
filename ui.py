@@ -27,20 +27,26 @@ ROOT = Path(__file__).resolve().parent
 BEATS = [
     ("1 · Before", "Have we made any substitution decision on the Mission St ceiling? What is on record?"),
     ("2 · Inbox", "Anything in my inbox this week I should worry about on Mission St?"),
+    ("2b · Site meeting (Drive)", "What did we agree at the Mission St site meeting last week? Check my Drive notes."),
     ("3 · Substitute", "Find me a substitute for the Mission St ceiling tile and check it against our standard."),
     ("4 · Send", "Send the substitution request to the BuildCo PM."),
+    ("4b · Reminder", "Set a reminder for Wednesday 23 September at 9am to chase BuildCo for the written lead time."),
     ("5 · After", "Have we made any substitution decision on the Mission St ceiling? What is on record?"),
 ]
+SCAN_PROMPT = ("Run a project risk scan: go through my inbox and my Drive notes, cross-check against memory and "
+               "the office standard, and give me the ranked risks with one proposed action each.")
 
 TAG_COLORS = [
     ("PERSONAL", "#2563eb"),
     ("OFFICE STANDARD", "#7c3aed"),
     ("PUBLIC", "#059669"),
     ("INBOX", "#d97706"),
+    ("DRIVE", "#0891b2"),
     ("CALCULATION", "#db2777"),
     ("ACTION", "#16a34a"),
 ]
-TAG_RE = re.compile(r"\[(PERSONAL|OFFICE STANDARD|PUBLIC|INBOX|CALCULATION|ACTION)([^\]]*)\]")
+TAG_RE = re.compile(r"\[(PERSONAL|OFFICE STANDARD|PUBLIC|INBOX|DRIVE|CALCULATION|ACTION)([^\]]*)\]")
+TOOL_RE = re.compile(r'Approve "([^"]+)"')
 
 
 def color_for(text: str) -> str:
@@ -157,16 +163,21 @@ def approval_panel(sess: Session) -> None:
         if isinstance(reason, dict):
             reason = reason.get("prompt") or json.dumps(reason)
         payload = parse_approval_prompt(str(reason))
+        tool_match = TOOL_RE.search(str(reason))
+        tool_name = tool_match.group(1) if tool_match else "action"
         with st.container(border=True):
-            st.markdown("#### 🔐 Approval required — `send_substitution_request`")
-            if payload:
+            st.markdown(f"#### 🔐 Approval required — `{tool_name}`")
+            if payload and "body" in payload:
                 st.markdown(f"**To:** {payload.get('to', '')}  \n**Subject:** {payload.get('subject', '')}")
                 st.text_area("Email body", payload.get("body", ""), height=260, disabled=True,
                              label_visibility="collapsed")
+            elif payload:
+                for key, value in payload.items():
+                    st.markdown(f"**{key}:** {value}")
             else:
                 st.code(str(reason))
             col_a, col_b = st.columns([1, 1])
-            if col_a.button("✅ Approve and send", type="primary", use_container_width=True, key=f"ok-{interrupt.id}"):
+            if col_a.button("✅ Approve", type="primary", use_container_width=True, key=f"ok-{interrupt.id}"):
                 sess.start_turn([{"interruptResponse": {"interruptId": i.id, "response": "y"}} for i in sess.pending],
                                 "✅ Approved — send it.")
                 st.rerun()
@@ -220,8 +231,9 @@ def sidebar(sess: Session) -> None:
             "company data: the office ceiling standard",
             "manufacturer pages via Bright Data (live or remembered)",
             "Gmail (or local .eml fallback)",
+            "Google Drive documents, stored into memory when read",
             "deterministic check in a Docker sandbox",
-            "an email actually sent",
+            "an email sent or a calendar reminder created",
         ])
     )
     st.sidebar.markdown(legend, unsafe_allow_html=True)
@@ -232,6 +244,10 @@ def sidebar(sess: Session) -> None:
         if st.sidebar.button(label, use_container_width=True, disabled=disabled, key=f"beat-{label}"):
             sess.start_turn(prompt, prompt)
             st.rerun()
+    st.sidebar.markdown("**Autonomous**")
+    if st.sidebar.button("🔎 Scan for risks", use_container_width=True, disabled=disabled, key="scan"):
+        sess.start_turn(SCAN_PROMPT, SCAN_PROMPT)
+        st.rerun()
     st.sidebar.divider()
     if st.sidebar.button("↺ Reset memory (clean 'before' state, ~70 s)", disabled=disabled, use_container_width=True):
         sess.reset_memory()
