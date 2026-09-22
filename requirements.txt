@@ -1,0 +1,12 @@
+cognee==1.6.0
+strands-agents[anthropic]==1.56.0
+strands-agents-tools==0.8.9
+mcp==2.1.1
+rich
+python-dotenv
+requests
+pypdf
+google-api-python-client
+google-auth-oauthlib
+google-auth-httplib2
+pytest

@@ -1,0 +1,11 @@
+.venv/
+.env
+credentials.json
+token.json
+.cognee/
+.cognee_system/
+.data_storage/
+__pycache__/
+*.pyc
+out/
+.pytest_cache/

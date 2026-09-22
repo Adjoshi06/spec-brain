@@ -1,0 +1,54 @@
+[
+  {
+    "slug": "rockfon-sonar",
+    "manufacturer": "Rockfon",
+    "product": "Rockfon Sonar",
+    "role": "specified product on Mission St",
+    "url": "https://www.rockfon.com/en-us/products/rockfon-sonar/"
+  },
+  {
+    "slug": "rockfon-koral",
+    "manufacturer": "Rockfon",
+    "product": "Rockfon Koral",
+    "role": "candidate substitute",
+    "url": "https://www.rockfon.com/en-us/products/rockfon-koral/",
+    "datasheet_pdf": "https://www.rockfon.com/siteassets/rockfon-na/datasheets/rockfon_stone-wool_koral_datasheet.pdf"
+  },
+  {
+    "slug": "usg-mars",
+    "manufacturer": "USG",
+    "product": "USG Mars Acoustical Panels (ClimaPlus)",
+    "role": "candidate substitute",
+    "url": "https://www.usg.com/en-US/p/product/mars-acoustical-panels-86985",
+    "datasheet_pdf": "https://www.usg.com/content/dam/USG_Marketing_Communications/united_states/product_promotional_materials/finished_assets/usg-mars-climaplus-ceiling-panels-data-SC1966.pdf"
+  },
+  {
+    "slug": "usg-mars-high-nrc",
+    "manufacturer": "USG",
+    "product": "USG Mars High-NRC Acoustical Panels",
+    "role": "candidate substitute",
+    "url": "https://www.usg.com/en-US/p/product/mars-high-nrc-acoustical-panels-88137",
+    "datasheet_pdf": "https://www.usg.com/content/dam/USG_Marketing_Communications/united_states/product_promotional_materials/finished_assets/usg-mars-climaplus-high-nrc-ceiling-panels-data-SC2487.pdf"
+  },
+  {
+    "slug": "armstrong-ultima-high-nrc",
+    "manufacturer": "Armstrong",
+    "product": "Armstrong ULTIMA High-NRC",
+    "role": "candidate substitute",
+    "url": "https://www.armstrongceilings.com/commercial/en/commercial-ceilings-walls/ultima-high-nrc-ceiling-tiles.html"
+  },
+  {
+    "slug": "armstrong-ultima-lay-in",
+    "manufacturer": "Armstrong",
+    "product": "Armstrong ULTIMA Lay-In and Tegular",
+    "role": "candidate substitute",
+    "url": "https://www.armstrongceilings.com/commercial/en/commercial-ceilings-walls/ultima-lay-in-and-tegular-ceiling-tiles.html"
+  },
+  {
+    "slug": "certainteed-symphony-f",
+    "manufacturer": "CertainTeed",
+    "product": "CertainTeed Symphony f",
+    "role": "candidate substitute",
+    "url": "https://www.certainteed.com/commercial-ceilings/products/voc-compliant-symphony-f/"
+  }
+]
