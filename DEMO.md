@@ -1,5 +1,10 @@
 # Demo runbook — 3 minutes
 
+Measured in the scripted run (Opus 5, effort medium): before 23 s · inbox 11 s · substitute
+66 s (two live fetches + two sandboxed checks) · send 34 s · after 21 s. Talk over the
+substitute turn; it is the long one. Before the demo: `python seed.py --reset --visualize`
+(≈70 s) gives a clean memory with no substitution decision on record.
+
 Setup before you walk up: `python cli.py` running, `graph\personal.html` open in a browser tab,
 your phone/Gmail tab visible for the sent email, Docker Desktop running, the rep email sitting
 in your inbox.

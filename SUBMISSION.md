@@ -41,15 +41,45 @@ check still runs but is labelled `UNSANDBOXED` — nothing fails silently.
 
 ## Before / after evidence
 
-<!-- filled from out/demo-transcript.md -->
+From the scripted run (`python demo.py`, transcript in `out/demo-transcript.md`; Claude Opus 5
+through Strands, effort medium).
 
-**Before** — "Have we made any substitution decision on the Mission St ceiling?"
-> _(answer before the run)_
+**Before** — "Have we made any substitution decision on the Mission St ceiling? What is on record?" (23 s)
+> **No substitution decision is on record yet.** … Original spec [PERSONAL, decision 2026-06-12]
+> Rockfon Sonar, 2x2 lay-in … rep quoted ~6 weeks **verbally, not in writing** … Schedule
+> [PERSONAL, note 2026-08-20] BuildCo wants the PO placed **by 25 Sept 2026** (~8 weeks PO-to-site).
 
-**The run** — inbox → memory → live web → sandboxed check → approval → email → remember.
+**Inbox** (11 s) — finds the rep's email, ties it to memory:
+> [INBOX] Sonar lead time is now **16 weeks from PO, not 6** … 16 weeks from a 25 Sept PO lands
+> in mid-January, well past Northgate's **December move-in** [PERSONAL] … exactly the failure
+> mode from [PERSONAL, lesson 2025-03-04] Harrison St.
 
-**After** — same question:
-> _(answer after the run, with sources)_
+**Substitute** (66 s) — office standard → candidates in memory → **live** Bright Data fetch of
+the USG page → two sandboxed checks:
+> | Config | NRC | CAC | Fire | Size | Recycled | Verdict |
+> |---|---|---|---|---|---|---|
+> | 0.90 NRC / 30 CAC | pass 0.90 | **fail 30** | pass Class A | pass 24x24 | pass 71% | [CALCULATION] **FAIL** |
+> | 0.85 NRC / 35 CAC | pass 0.85 | pass 35 | pass Class A | pass 24x24 | pass 71% | [CALCULATION] **PASS** |
+>
+> **Lead time is not stated on the page — I don't have it in memory.** … Armstrong ULTIMA: the
+> live page returned no NRC or CAC figures, so I can't check it.
+
+**Send** (34 s) — approval gate → substitution request sent → decision written to memory.
+
+**After** — recall of the same memory, once the decision has been written back (4 s):
+> [PERSONAL] [personal decision, 2026-09-21] Mission St, Level 3 open office (Northgate Partners)
+> — ceiling substitution sent 2026-09-21. The specified Rockfon Sonar 2x2 lay-in went from an
+> indicated ~6 weeks to 16 weeks from PO … Proposed substitute: USG Mars High-NRC … primary
+> configuration 0.85 NRC / 35 CAC, which passed a sandboxed check against the office standard on
+> all five attributes … The 0.90 NRC / 30 CAC configuration … FAILED on CAC … Source:
+> usg.com/en-US/p/product/mars-high-nrc-acoustical-panels-88137, retrieved 2026-09-22 … Lead time
+> is not published on the manufacturer page, so nothing is confirmed until BuildCo replies in
+> writing.
+> sources: document_name=text_2153d9fc…; chunk_id=fc3b9b40-…
+
+A second honest finding: in the first scripted run this recall returned a two-word stub
+("Got it.") — Cognee's session memory (on by default) answered from a cached turn instead of
+searching. `CACHING=false` fixed it; the run above is the fixed behaviour.
 
 ## What is real and what is seeded
 
