@@ -47,6 +47,13 @@ The model never compares numbers: `check_substitute` runs `spec_check.py` inside
 with `--network none --read-only --cap-drop ALL`, as user `nobody`. If Docker is missing the
 check still runs but is labelled `UNSANDBOXED` — nothing fails silently.
 
+## Demo video
+
+`artifacts/video/spec-brain-demo.webm` — the browser UI running all seven beats end to end
+(before → inbox → Drive site notes → substitute with live fetch and sandboxed checks → approved
+email → approved calendar reminder → after), recorded by driving the live app with Playwright
+(`make_video.py`). Real Gmail, real Calendar, real Bright Data fetches, real Cognee memory.
+
 ## Before / after evidence
 
 From the scripted run (`python demo.py`; full transcript in `artifacts/demo-transcript.md`, the
