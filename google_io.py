@@ -83,6 +83,14 @@ def _load_credentials():
 _services: tuple | None = None
 
 
+def _reset_services() -> None:
+    """Drop cached API clients so the next call rebuilds them from the token file (e.g. after
+    an expired access token failed to refresh inside a long-running process)."""
+    global _services, _calendar
+    _services = None
+    _calendar = None
+
+
 def get_services():
     """Return ``(gmail_service, drive_service)``; runs the OAuth flow on first use."""
     global _services
@@ -190,49 +198,57 @@ def search_inbox(query: str, max_results: int = 5) -> list[dict]:
     """Search mail with Gmail query syntax (e.g. ``subject:"Mission St" newer_than:30d``)."""
     if not google_ready():
         return _search_local(query, max_results)
-    try:
-        gmail, _ = get_services()
-        listing = gmail.users().messages().list(userId="me", q=query, maxResults=max_results).execute()
-        results = []
-        for ref in listing.get("messages", []) or []:
-            msg = gmail.users().messages().get(userId="me", id=ref["id"], format="full").execute()
-            headers = {h["name"].lower(): h["value"] for h in msg.get("payload", {}).get("headers", [])}
-            results.append(
-                {
-                    "id": msg["id"],
-                    "from": headers.get("from", ""),
-                    "to": headers.get("to", ""),
-                    "subject": headers.get("subject", ""),
-                    "date": headers.get("date", ""),
-                    "snippet": msg.get("snippet", ""),
-                    "body_text": _gmail_body_text(msg.get("payload", {})).strip(),
-                    "source": "gmail",
-                }
-            )
-        return results
-    except Exception as exc:  # noqa: BLE001 - Gmail-side failure: fall back, but label it
-        hits = _search_local(query, max_results)
-        for hit in hits:
-            hit["source"] = f"local_file (gmail unavailable: {type(exc).__name__})"
-        return hits
+    last_exc = None
+    for attempt in range(2):  # a stale/expired cached client is rebuilt from the token file once
+        try:
+            gmail, _ = get_services()
+            listing = gmail.users().messages().list(userId="me", q=query, maxResults=max_results).execute()
+            results = []
+            for ref in listing.get("messages", []) or []:
+                msg = gmail.users().messages().get(userId="me", id=ref["id"], format="full").execute()
+                headers = {h["name"].lower(): h["value"] for h in msg.get("payload", {}).get("headers", [])}
+                results.append(
+                    {
+                        "id": msg["id"],
+                        "from": headers.get("from", ""),
+                        "to": headers.get("to", ""),
+                        "subject": headers.get("subject", ""),
+                        "date": headers.get("date", ""),
+                        "snippet": msg.get("snippet", ""),
+                        "body_text": _gmail_body_text(msg.get("payload", {})).strip(),
+                        "source": "gmail",
+                    }
+                )
+            return results
+        except Exception as exc:  # noqa: BLE001
+            last_exc = exc
+            _reset_services()
+    hits = _search_local(query, max_results)  # Gmail-side failure twice: fall back, but label it
+    for hit in hits:
+        hit["source"] = f"local_file (gmail unavailable: {type(last_exc).__name__}: {str(last_exc)[:80]})"
+    return hits
 
 
 def send_email(to: str, subject: str, body: str) -> dict:
     """Send a plain-text email from the authorised account (or write it to ``out/`` in fallback)."""
     if not google_ready():
         return _send_local(to, subject, body)
-    try:
-        gmail, _ = get_services()
-        mime = MIMEText(body, "plain", "utf-8")
-        mime["to"] = to
-        mime["subject"] = subject
-        raw = base64.urlsafe_b64encode(mime.as_bytes()).decode("ascii")
-        sent = gmail.users().messages().send(userId="me", body={"raw": raw}).execute()
-        return {"id": sent.get("id"), "threadId": sent.get("threadId"), "to": to, "subject": subject, "source": "gmail"}
-    except Exception as exc:  # noqa: BLE001 - never lose the request: write it locally, say why
-        result = _send_local(to, subject, body)
-        result["source"] = f"local_file (gmail failed: {type(exc).__name__}: {str(exc)[:120]})"
-        return result
+    last_exc = None
+    for attempt in range(2):
+        try:
+            gmail, _ = get_services()
+            mime = MIMEText(body, "plain", "utf-8")
+            mime["to"] = to
+            mime["subject"] = subject
+            raw = base64.urlsafe_b64encode(mime.as_bytes()).decode("ascii")
+            sent = gmail.users().messages().send(userId="me", body={"raw": raw}).execute()
+            return {"id": sent.get("id"), "threadId": sent.get("threadId"), "to": to, "subject": subject, "source": "gmail"}
+        except Exception as exc:  # noqa: BLE001
+            last_exc = exc
+            _reset_services()
+    result = _send_local(to, subject, body)  # never lose the request: write it locally, say why
+    result["source"] = f"local_file (gmail failed: {type(last_exc).__name__}: {str(last_exc)[:120]})"
+    return result
 
 
 # --------------------------------------------------------------------------- calendar
@@ -278,6 +294,7 @@ def create_event(summary: str, start_iso: str, notes: str = "", minutes: int = 3
         return {"id": created.get("id"), "htmlLink": created.get("htmlLink"), "summary": summary,
                 "start": start_iso, "source": "google"}
     except Exception as exc:  # noqa: BLE001 - never lose the reminder: write it locally, say why
+        _reset_services()
         result = _reminder_local(summary, start_iso, notes)
         result["source"] = f"local_file (calendar failed: {type(exc).__name__}: {str(exc)[:120]})"
         return result
