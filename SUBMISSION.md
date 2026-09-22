@@ -49,8 +49,9 @@ check still runs but is labelled `UNSANDBOXED` — nothing fails silently.
 
 ## Before / after evidence
 
-From the scripted run (`python demo.py`, transcript in `out/demo-transcript.md`; Claude Opus 5
-through Strands, effort medium).
+From the scripted run (`python demo.py`; full transcript in `artifacts/demo-transcript.md`, the
+generated email in `artifacts/substitution-request.md`, timings in `artifacts/smoke-results.md`;
+Claude Opus 5 through Strands, effort medium).
 
 **Before** — "Have we made any substitution decision on the Mission St ceiling? What is on record?" (23 s)
 > **No substitution decision is on record yet.** … Original spec [PERSONAL, decision 2026-06-12]
