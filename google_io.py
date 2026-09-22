@@ -71,7 +71,10 @@ def _load_credentials():
             creds = None
     if not creds or not creds.valid:
         flow = InstalledAppFlow.from_client_secrets_file(str(CREDENTIALS_FILE), SCOPES)
-        creds = flow.run_local_server(port=0, open_browser=True, timeout_seconds=600)
+        # Fixed port: the OAuth client is a "web" type, so http://localhost:<port>/ must be
+        # registered as an authorised redirect URI in the Google Cloud console.
+        port = int(os.environ.get("GOOGLE_OAUTH_PORT", "8765"))
+        creds = flow.run_local_server(port=port, open_browser=True, timeout_seconds=600)
         TOKEN_FILE.write_text(creds.to_json(), encoding="utf-8")
     return creds
 

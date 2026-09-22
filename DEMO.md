@@ -5,9 +5,10 @@ Measured in the scripted run (Opus 5, effort medium): before 23 s · inbox 11 s 
 substitute turn; it is the long one. Before the demo: `python seed.py --reset --visualize`
 (≈70 s) gives a clean memory with no substitution decision on record.
 
-Setup before you walk up: `python cli.py` running, `graph\personal.html` open in a browser tab,
-your phone/Gmail tab visible for the sent email, Docker Desktop running, the rep email sitting
-in your inbox.
+Setup before you walk up: run `powershell -ExecutionPolicy Bypass -File .\prep.ps1` (clean
+memory + graphs, ~70 s), then `.venv\Scripts\python.exe cli.py`. Docker Desktop running. If
+Gmail is authorised, the rep email sits in your inbox and your Gmail tab is visible for the sent
+request; otherwise the inbox comes from `personal_data\*.eml` and the request lands in `out\`.
 
 | Time | Say | Do |
 |---|---|---|
