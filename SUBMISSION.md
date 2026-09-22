@@ -94,6 +94,10 @@ searching. `CACHING=false` fixed it; the run above is the fixed behaviour.
 
 - Real: Cognee graph + recall, Bright Data scrapes of real manufacturer pages, the Docker
   sandbox, the Strands approval gate, the Gmail send, the decision written back to memory.
+  (The scripted runs used the local `.eml` inbox and file-based send because Google OAuth was
+  still being set up; live Gmail read/send and Drive listing were verified afterwards and the
+  tools switch to them automatically once a token exists — falling back, with a visible label,
+  if Gmail errors.)
 - Seeded for the demo: the personal notes and the office standard are fictional and written
   in the persona's voice (see `seed/README.md`). The trigger email is one I sent myself.
 - Not read: anyone else's inbox.
