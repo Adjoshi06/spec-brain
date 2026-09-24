@@ -1,0 +1,3 @@
+# Auto-detected from the GitHub repo (Adjoshi06/spec-brain) and git.
+branch: master
+mergeMethod: merge   # all merge methods allowed on the repo (merge commit / squash / rebase); no explicit repo default set — TODO(confirm) if you prefer squash
